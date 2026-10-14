@@ -31,18 +31,6 @@ O planejamento de entregas está no [Product Backlog](docs/product_backlog.md), 
 - Pesquisa de shows por título, disponível para usuários autenticados.
 - Exclusão de shows restrita ao administrador.
 
-### Estado atual da implementação
-
-As funcionalidades acima descrevem o escopo do projeto. Os fluxos de cadastro e autenticação ainda possuem erros de execução:
-
-- O cadastro de usuários possui caminhos inválidos nos `require_once` e um redirecionamento incorreto.
-- O login inicia a sessão e redireciona depois de gerar HTML; sem buffer de saída, essas operações falham.
-- A publicação de shows ainda não utiliza transação e não valida os campos no servidor. Uma falha ao inserir bandas pode deixar o evento parcialmente salvo.
-- A exclusão verifica a permissão administrativa no servidor, mas é acionada por GET e ainda não possui proteção contra CSRF.
-
-O feed também inclui eventos passados e, apesar do título da página, não ordena por data de publicação. Essas pendências precisam ser resolvidas para considerar os fluxos completos validados.
-
----
 
 ## Como Executar o Projeto Localmente
 
@@ -127,9 +115,16 @@ Acesse [http://localhost:8000/scena/index.php](http://localhost:8000/scena/index
 
 ### 5. Acessar o sistema
 
-O feed é público. A publicação e a pesquisa exigem login. O fluxo esperado é criar uma conta e entrar com suas credenciais; atualmente, ele depende das correções de cadastro e login descritas em **Estado atual da implementação**. O cadastro **não** autentica automaticamente o usuário.
+O feed é público. A publicação e a pesquisa exigem login. O fluxo esperado é criar uma conta e entrar com suas credenciais. O cadastro **não** autentica automaticamente o usuário.
 
 Para utilizar a exclusão de shows, a conta deve possuir `is_admin = TRUE`, atribuído pela gestão do sistema no banco de dados. O cadastro comum utiliza o padrão `FALSE` e não oferece essa opção.
+Para dar permissões de administrador a um usuario já existente, rode este comando diretamente no banco de dados
+```psql
+UPDATE usuarios
+SET is_admin = TRUE
+WHERE email = 'seuemail@exemplo.com';
+```
+
 
 ---
 
