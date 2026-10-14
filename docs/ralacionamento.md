@@ -1,22 +1,21 @@
 ```mermaid
 erDiagram
- Usuarios{
-        int id pk
-        varchar(50) nome
-        varchar(50) email
-        varchar(13) senha
+    shows ||--o{ shows_bandas : possui
+    usuarios {
+        int id PK
+        string nome
+        string email UK
+        string senha
+        boolean is_admin
     }
-        SHOWS {
+    shows {
         int id PK
         string titulo
-        timestamp data_hora
-        text descricao
-        int banda_id FK
+        date data_show
+        string endereco
     }
-    Bandas{
-            int id pk
-            varchar(255) nome
-            varchar(255) cidade 
-            text bio
-            string url
-        }
+    shows_bandas {
+        int show_id PK, FK
+        string nome_banda PK
+    }
+```

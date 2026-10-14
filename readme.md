@@ -37,7 +37,7 @@ As funcionalidades acima descrevem o escopo do projeto. Os fluxos de cadastro e 
 
 - O cadastro de usuários possui caminhos inválidos nos `require_once` e um redirecionamento incorreto.
 - O login inicia a sessão e redireciona depois de gerar HTML; sem buffer de saída, essas operações falham.
-- A publicação de shows ainda não utiliza transação, não valida os campos no servidor e não preenche `usuario_id`. Uma falha ao inserir bandas pode deixar o evento parcialmente salvo.
+- A publicação de shows ainda não utiliza transação e não valida os campos no servidor. Uma falha ao inserir bandas pode deixar o evento parcialmente salvo.
 - A exclusão verifica a permissão administrativa no servidor, mas é acionada por GET e ainda não possui proteção contra CSRF.
 
 O feed também inclui eventos passados e, apesar do título da página, não ordena por data de publicação. Essas pendências precisam ser resolvidas para considerar os fluxos completos validados.
@@ -127,7 +127,7 @@ Acesse [http://localhost:8000/scena/index.php](http://localhost:8000/scena/index
 
 ### 5. Acessar o sistema
 
-O feed é público. A publicação e a pesquisa exigem login. O fluxo esperado é criar uma conta e entrar com suas credenciais; atualmente, ele depende das correções de cadastro e login descritas em **Estado atual da implementação**. O cadastro não autentica automaticamente o usuário.
+O feed é público. A publicação e a pesquisa exigem login. O fluxo esperado é criar uma conta e entrar com suas credenciais; atualmente, ele depende das correções de cadastro e login descritas em **Estado atual da implementação**. O cadastro **não** autentica automaticamente o usuário.
 
 Para utilizar a exclusão de shows, a conta deve possuir `is_admin = TRUE`, atribuído pela gestão do sistema no banco de dados. O cadastro comum utiliza o padrão `FALSE` e não oferece essa opção.
 
@@ -234,7 +234,6 @@ Esta seção descreve o modelo atual definido em [database/tabelas atuais.sql](d
 | `shows` | `titulo` | `VARCHAR(255) NOT NULL` | Nome do evento. |
 | `shows` | `data_show` | `DATE NOT NULL` | Data do evento, sem horário. |
 | `shows` | `endereco` | `VARCHAR(255) NOT NULL` | Local ou endereço do evento. |
-| `shows` | `usuario_id` | `INT`, chave estrangeira, aceita nulo | Referência ao autor; ainda não preenchida pela publicação. |
 | `shows_bandas` | `show_id` | `INT NOT NULL`, chave estrangeira | Referência ao show. |
 | `shows_bandas` | `nome_banda` | `VARCHAR(255) NOT NULL` | Nome de uma banda participante. |
 
@@ -242,7 +241,6 @@ A chave primária de `shows_bandas` é composta por `show_id` e `nome_banda`. Ho
 
 ### 4.2 Relacionamentos
 
-- Um usuário pode estar associado a vários shows; cada show pode ter um usuário responsável. A exclusão do usuário define `usuario_id` como nulo (`ON DELETE SET NULL`).
 - Um show possui vários registros em `shows_bandas`. A exclusão do show remove suas participações (`ON DELETE CASCADE`).
 - O mesmo nome de banda pode aparecer em diferentes shows, mas não há um identificador compartilhado nem um cadastro independente de bandas. A chave composta impede repetir exatamente o mesmo nome no mesmo show.
 
@@ -254,7 +252,6 @@ O diagrama representa as tabelas atuais. Em `shows_bandas`, os dois campos forma
 
 ```mermaid
 erDiagram
-    usuarios |o--o{ shows : publica
     shows ||--o{ shows_bandas : possui
     usuarios {
         int id PK
@@ -268,7 +265,6 @@ erDiagram
         string titulo
         date data_show
         string endereco
-        int usuario_id FK
     }
     shows_bandas {
         int show_id PK, FK

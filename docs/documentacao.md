@@ -70,9 +70,6 @@ Armazena as informações principais dos eventos.
 | `titulo` | `VARCHAR(255)` | Obrigatório | Nome do evento. |
 | `data_show` | `DATE` | Obrigatório | Data de realização do show. |
 | `endereco` | `VARCHAR(255)` | Obrigatório | Local ou endereço do evento. |
-| `usuario_id` | `INT` | Chave estrangeira; aceita nulo | Referência ao usuário responsável pela publicação. |
-
-`usuario_id` referencia `usuarios(id)` com `ON DELETE SET NULL`: se um usuário for removido do banco, seus shows permanecem e a referência fica nula. Atualmente, o formulário de publicação não preenche esse campo.
 
 ### Tabela `shows_bandas`
 

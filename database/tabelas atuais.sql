@@ -22,13 +22,7 @@ CREATE TABLE shows (
     id SERIAL PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
     data_show DATE NOT NULL,
-    endereco VARCHAR(255) NOT NULL,
-
-    usuario_id INT,
-
-    FOREIGN KEY (usuario_id)
-        REFERENCES usuarios(id)
-        ON DELETE SET NULL
+    endereco VARCHAR(255) NOT NULL
 );
 
 -- 3. TABELA DE BANDAS DOS SHOWS

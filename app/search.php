@@ -24,21 +24,35 @@ require_once __DIR__ . '/../login/verifica.php';
         $shows = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $termo    = $_POST['pesquisa'];
-            $sql = "SELECT 
+            // Busca os shows pelo título e reúne as bandas de cada show em um único resultado.
+            $sql = "SELECT
+            -- Seleciona os dados do show; s é o apelido da tabela shows.
             s.id,
             s.titulo,
             s.data_show,
             s.endereco,
+            -- string_agg junta os nomes das bandas, separados por vírgula.
+            -- COALESCE usa o texto abaixo quando a agregação retorna NULL (sem nomes de bandas).
             COALESCE(string_agg(sb.nome_banda, ', '), 'Sem banda cadastrada') AS bandas
         FROM shows s
+        -- LEFT JOIN mantém o show no resultado mesmo quando ele não tem bandas cadastradas.
+        -- sb é o apelido de shows_bandas; o vínculo entre as tabelas é o ID do show.
         LEFT JOIN shows_bandas sb
             ON s.id = sb.show_id
+        -- ILIKE procura no título sem diferenciar maiúsculas de minúsculas.
+        -- :termo é o parâmetro que receberá o texto pesquisado com os curingas %.
         WHERE s.titulo ILIKE :termo
+        -- Agrupa as bandas por show, gerando uma linha para cada s.id.
         GROUP BY s.id
+        -- Ordena pela data do show, da mais antiga para a mais recente.
         ORDER BY s.data_show ASC";
+            // Prepara a consulta para enviar o valor pesquisado separado do código SQL.
             $stmt = $conexao->prepare($sql);
+            // Os curingas % permitem encontrar o termo em qualquer posição do título.
             $termoBusca = "%$termo%";
+            // Associa o valor da pesquisa ao parâmetro :termo da consulta.
             $stmt->bindParam(":termo", $termoBusca);
+            // Executa a consulta e obtém os resultados em arrays com os nomes das colunas como chaves.
             $stmt->execute();
             $shows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
