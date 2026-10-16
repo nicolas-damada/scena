@@ -37,7 +37,7 @@ O planejamento de entregas está no [Product Backlog](docs/product_backlog.md), 
 ### Pré-requisitos
 
 - PHP com as extensões `PDO` e `pdo_pgsql` habilitadas.
-- PostgreSQL instalado e em execução.
+- PostgreSQL instalado e em execução, com o comando `psql` disponível no terminal.
 - Git, caso o projeto seja obtido por clonagem.
 - Navegador web.
 
@@ -52,56 +52,36 @@ cd scena
 
 Também é possível baixar o projeto como ZIP e extrair os arquivos em uma pasta chamada `scena`.
 
-### 2. Criar o banco de dados
+### 2. Configurar o banco de dados
 
-Crie um banco no PostgreSQL. Neste exemplo, o nome utilizado é `scena`:
-
-```bash
-psql -U postgres -c "CREATE DATABASE scena;"
-```
-
-Na pasta do projeto, importe o [script oficial de criação das tabelas](database/tabelas%20atuais.sql) em um banco vazio:
+Na pasta do projeto, abra o PostgreSQL pelo terminal e informe a senha de `postgres`:
 
 ```bash
-psql -U postgres -d scena -v ON_ERROR_STOP=1 -f "database/tabelas atuais.sql"
+psql -U postgres
 ```
 
-Esse script já cria `usuarios.is_admin` como `BOOLEAN NOT NULL DEFAULT FALSE`. Ele não é uma migração para bancos existentes; se o banco já estiver configurado, confira a estrutura antes de executar qualquer script de criação.
+Dentro do psql, execute os comandos abaixo para criar o usuário com senha `scena`, criar o banco e importar o [dump das tabelas](database/tabelas%20atuais.sql):
 
-Opcionalmente, em um banco de desenvolvimento, carregue os dados de exemplo uma única vez:
-
-```bash
-psql -U postgres -d scena -v ON_ERROR_STOP=1 -f database/dados_teste.sql
+```text
+CREATE USER scena WITH PASSWORD 'scena';
+CREATE DATABASE scena OWNER scena;
+\c scena
+\i 'database/tabelas atuais.sql'
+\q
 ```
 
-O script cria a conta `teste@scena.com`, com senha `ScenaTeste123!`, sem permissão administrativa, e um show com três bandas. Consulte [database/README.md](database/README.md) para os detalhes dos scripts.
+O dump cria as tabelas e concede ao usuário `scena` as permissões necessárias para a aplicação. Execute essa instalação em um banco novo.
 
 ### 3. Configurar a conexão
 
-Em [database/conect.php](database/conect.php), ajuste `$host`, `$dbname`, `$user` e `$pass` conforme seu ambiente. A configuração atual aponta para um servidor da rede local; para um PostgreSQL instalado na mesma máquina, utilize `localhost`. A porta padrão é `5432`; se necessário, inclua outra porta no DSN.
-
-Exemplo de conexão compatível com a variável utilizada pela aplicação e com o retorno esperado por `index.php`:
+Em [database/conect.php](database/conect.php), ajuste os valores no início do arquivo:
 
 ```php
-<?php
-
 $host = 'localhost';
-$port = '5432';
 $dbname = 'scena';
-$user = 'postgres';
-$pass = 'sua_senha';
-
-$conexao = new PDO(
-    "pgsql:host=$host;port=$port;dbname=$dbname",
-    $user,
-    $pass,
-    [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-);
-
-return $conexao;
+$user = 'scena';
+$pass = 'scena';
 ```
-
-Use uma conta do PostgreSQL com acesso às tabelas do banco configurado. As contas cadastradas na tabela `usuarios` são contas da aplicação, distintas do usuário da conexão PDO.
 
 ### 4. Iniciar a aplicação
 
@@ -118,13 +98,11 @@ Acesse [http://localhost:8000/scena/index.php](http://localhost:8000/scena/index
 O feed é público. A publicação e a pesquisa exigem login. O fluxo esperado é criar uma conta e entrar com suas credenciais. O cadastro **não** autentica automaticamente o usuário.
 
 Para utilizar a exclusão de shows, a conta deve possuir `is_admin = TRUE`, atribuído pela gestão do sistema no banco de dados. O cadastro comum utiliza o padrão `FALSE` e não oferece essa opção.
-Para dar permissões de administrador a um usuario já existente, rode este comando diretamente no banco de dados
-```psql
-UPDATE usuarios
-SET is_admin = TRUE
-WHERE email = 'seuemail@exemplo.com';
-```
+Para dar permissões de administrador a uma conta já cadastrada na aplicação, conecte-se ao banco `scena` pelo psql e execute, substituindo o e-mail:
 
+```sql
+UPDATE usuarios SET is_admin = TRUE WHERE email = 'seuemail@exemplo.com';
+```
 
 ---
 

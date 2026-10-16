@@ -2,7 +2,9 @@
 -- SCENA - GERENCIADOR DE SHOWS
 -- =====================================
 -- Script oficial de criação para um banco vazio.
--- Os dados de exemplo estão em dados_teste.sql.
+-- Crie antes o usuário scena e o banco conforme o passo 2 de ../readme.md.
+-- Importe como postgres, conectado ao banco scena.
+-- Este script contém somente a estrutura, sem dados de exemplo.
 
 BEGIN;
 
@@ -37,4 +39,11 @@ CREATE TABLE shows_bandas (
         REFERENCES shows(id)
         ON DELETE CASCADE
 );
+
+-- 4. PERMISSÕES DO USUÁRIO DA APLICAÇÃO
+
+GRANT USAGE ON SCHEMA public TO scena;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO scena;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO scena;
+
 COMMIT;
