@@ -46,7 +46,7 @@ Os comandos abaixo partem de uma instalação nova e utilizam `scena` como nome 
 ### 1. Obter o projeto
 
 ```bash
-git clone https://github.com/nicolas-damada/scene-band_hub.git scena
+git clone https://github.com/nicolas-damada/scena-projeto.git scena
 cd scena
 ```
 
