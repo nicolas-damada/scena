@@ -3,7 +3,7 @@
 <?php
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             cadastrar_user($conexao, $_POST['nome'], $_POST['email'],$_POST['senha']);
-            header("location: scena/index.php");
+            header("location: /scena/index.php");
             exit();
             
         }
