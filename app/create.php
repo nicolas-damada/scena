@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . '/../includes/functions.php';//requere o funtions e o verificador de sessao
+<?php require_once __DIR__ . '/../includes/functions.php'; //requere o funtions e o verificador de sessao
 require_once __DIR__ . '/../login/verifica.php';
 ?>
 <!DOCTYPE html>
@@ -14,7 +14,8 @@ require_once __DIR__ . '/../login/verifica.php';
 
 <body>
 
-    <?php include __DIR__ . '/../includes/header.php';//inclui o header ?> 
+    <?php include __DIR__ . '/../includes/header.php'; //inclui o header 
+    ?>
     <main>
         <h1>Cadastro de Show: </h1>
         <form action="" method="post">
@@ -23,7 +24,10 @@ require_once __DIR__ . '/../login/verifica.php';
             <label for="banda">Banda: </label>
             <input type="text" name="banda" id="banda" required><br>
             <label for="data">Data: </label>
-            <input type="date" name="data" id="data" required><br>
+            <input type="date"
+                name="data"
+                min="<?= date('Y-m-d') ?>"
+                required><br>
             <label for="local">Local: </label>
             <input type="text" name="local" id="local" required><br>
             <input type="submit" value="Postar">
