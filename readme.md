@@ -46,7 +46,7 @@ Os comandos abaixo partem de uma instalação nova e utilizam `scena` como nome 
 ### 1. Obter o projeto
 
 ```bash
-git clone https://github.com/nicolas-damada/scena-projeto.git scena
+git clone https://github.com/nicolas-damada/scena.git scena
 cd scena
 ```
 
@@ -66,7 +66,7 @@ Dentro do psql, execute os comandos abaixo para criar o usuário com senha `scen
 CREATE USER scena WITH PASSWORD 'scena';
 CREATE DATABASE scena OWNER scena;
 \c scena
-\i 'database/tabelas atuais.sql'
+\i 'database/scena.sql'
 \q
 ```
 
