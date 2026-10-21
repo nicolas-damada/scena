@@ -292,4 +292,5 @@ flowchart TD
 Este roteiro registra verificações a executar; não representa um relatório de testes realizados.
 
 ## 7. Prototipação
+**o protótipo não reflete o estado atual do projeto**
 <img src="images\excali.png">
