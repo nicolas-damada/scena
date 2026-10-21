@@ -290,3 +290,6 @@ flowchart TD
 | Excluir um show cuja banda participa de outro evento | Banda e outro evento preservados. |
 
 Este roteiro registra verificações a executar; não representa um relatório de testes realizados.
+
+## 7. Prototipação
+<img src="images\excali.png">
