@@ -60,7 +60,7 @@ Na pasta do projeto, abra o PostgreSQL pelo terminal e informe a senha de `postg
 psql -U postgres
 ```
 
-Dentro do psql, execute os comandos abaixo para criar o usuário com senha `scena`, criar o banco e importar o [dump das tabelas](database/tabelas%20atuais.sql):
+Dentro do psql, execute os comandos abaixo para criar o usuário com senha `scena`, criar o banco e importar o [dump das tabelas](database/scena.sql):
 
 ```text
 CREATE USER scena WITH PASSWORD 'scena';
