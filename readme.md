@@ -192,7 +192,7 @@ Os requisitos abaixo descrevem o comportamento esperado da aplicação e os crit
 
 ## 4. Organização dos Dados
 
-Esta seção descreve o modelo atual definido em [database/tabelas atuais.sql](database/tabelas%20atuais.sql). Os nomes das bandas são armazenados diretamente em `shows_bandas`; não existe uma tabela independente `bandas`.
+Esta seção descreve o modelo atual definido em [database/tabelas atuais.sql](database/scena.sql). Os nomes das bandas são armazenados diretamente em `shows_bandas`; não existe uma tabela independente `bandas`.
 
 ### 4.1 Dicionário de Dados
 
